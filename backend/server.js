@@ -35,9 +35,15 @@ const bucket = admin.storage().bucket();
 const app = express();
 const allowedOrigins = [
     'http://localhost:3000',
-    'ho-internal-18gh.vercel.app',
+    'https://ho-internal-18gh.vercel.app',
+    'https://ho-internal.vercel.app',
     process.env.ALLOWED_ORIGIN
 ].filter(Boolean);
+
+// Root Endpoint for Vercel Browser Testing
+app.get('/', (req, res) => {
+    res.status(200).send('Huntsman Optics Backend is Live and Running!');
+});
 
 app.use(cors({
     origin: allowedOrigins,
