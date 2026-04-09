@@ -51,6 +51,15 @@ app.use((req, res, next) => {
     next();
 });
 
+// Healthcheck Endpoint for Deployment Monitoring
+app.get('/api/health', (req, res) => {
+    res.status(200).json({
+        status: 'healthy',
+        environment: process.env.NODE_ENV || 'development',
+        timestamp: new Date().toISOString()
+    });
+});
+
 const fs = require('fs');
 const os = require('os');
 
