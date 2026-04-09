@@ -22,10 +22,12 @@ try {
     });
 }
 
-admin.initializeApp({
-    credential: credential,
-    storageBucket: 'huntsman-optics.firebasestorage.app'
-});
+if (!admin.apps.length) {
+    admin.initializeApp({
+        credential: credential,
+        storageBucket: 'huntsman-optics.firebasestorage.app'
+    });
+}
 
 const db = admin.firestore();
 const bucket = admin.storage().bucket();
@@ -50,10 +52,12 @@ app.use((req, res, next) => {
 });
 
 const fs = require('fs');
+const os = require('os');
 
 // Set up Multer using disk storage instead of RAM to prevent server crashes on large videos
+// On Vercel, the only writable directory is /tmp, which os.tmpdir() maps to automatically.
 const upload = multer({
-    dest: 'temp_uploads/',
+    dest: os.tmpdir(),
     limits: { fileSize: 2000 * 1024 * 1024 }, // 2GB limit
 });
 
@@ -418,3 +422,6 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Backend server listening on port ${PORT}`);
 });
+
+// MUST EXPORT EXPRESS APP FOR VERCEL SERVERLESS FUNCTIONS
+module.exports = app;
