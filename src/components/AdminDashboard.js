@@ -3,12 +3,14 @@ import { firestore } from "../firebase";
 import Loader from "./Loader";
 import { toast } from "react-toastify";
 import { doc, updateDoc, deleteDoc, getDocs, collection } from "firebase/firestore";
+import DeviceManager from "./DeviceManager";
 import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [activeView, setActiveView] = useState("users");
   const usersPerPage = 6;
 
   useEffect(() => {
@@ -79,76 +81,97 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard-container">
-      <h2 className="dashboard-title">USER DETAILS</h2>
-      {isLoading ? <Loader /> : (
+      <div className="admin-tabs">
+        <button
+          className={`admin-tab-btn ${activeView === "users" ? "active" : ""}`}
+          onClick={() => setActiveView("users")}
+        >
+          USER MANAGEMENT
+        </button>
+        <button
+          className={`admin-tab-btn ${activeView === "products" ? "active" : ""}`}
+          onClick={() => setActiveView("products")}
+        >
+          PRODUCT MANAGEMENT
+        </button>
+      </div>
+
+      {activeView === "users" ? (
         <>
-          <div className="table-wrapper">
-            <table className="admin-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Region</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentUsers.map(user => (
-                  <tr key={user.id}>
-                    <td>{user.name || "N/A"}</td>
-                    <td>{user.email || "N/A"}</td>
-                    <td>
-                      <select
-                        className="role-select"
-                        value={user.role || "dealer"}
-                        onChange={(e) => updateUserRole(user.id, e.target.value)}
-                      >
-                        <option value="dealer">Dealer</option>
-                        <option value="representative">Representative</option>
-                        <option value="influencer">Influencer</option>
-                        <option value="staff">Staff</option>
-                        <option value="admin">Admin</option>
-                      </select>
-                    </td>
-                    <td>
-                      <select
-                        className="role-select"
-                        value={user.country || "Australia"}
-                        onChange={(e) => updateUserCountry(user.id, e.target.value)}
-                      >
-                        <option value="Australia">Australia</option>
-                        <option value="New Zealand">New Zealand</option>
-                      </select>
-                    </td>
+          <h2 className="dashboard-title">USER DETAILS</h2>
+          {isLoading ? <Loader /> : (
+            <>
+              <div className="table-wrapper">
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Role</th>
+                      <th>Region</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentUsers.map(user => (
+                      <tr key={user.id}>
+                        <td>{user.name || "N/A"}</td>
+                        <td>{user.email || "N/A"}</td>
+                        <td>
+                          <select
+                            className="role-select"
+                            value={user.role || "dealer"}
+                            onChange={(e) => updateUserRole(user.id, e.target.value)}
+                          >
+                            <option value="dealer">Dealer</option>
+                            <option value="representative">Representative</option>
+                            <option value="influencer">Influencer</option>
+                            <option value="staff">Staff</option>
+                            <option value="admin">Admin</option>
+                          </select>
+                        </td>
+                        <td>
+                          <select
+                            className="role-select"
+                            value={user.country || "Australia"}
+                            onChange={(e) => updateUserCountry(user.id, e.target.value)}
+                          >
+                            <option value="Australia">Australia</option>
+                            <option value="New Zealand">New Zealand</option>
+                          </select>
+                        </td>
 
-                    <td>
-                      <button
-                        className="delete-btn"
-                        onClick={() => deleteUser(user.id)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
+                        <td>
+                          <button
+                            className="delete-btn"
+                            onClick={() => deleteUser(user.id)}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination Controls */}
+              <div className="pagination">
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <button
+                    key={i + 1}
+                    className={currentPage === i + 1 ? "active-page" : ""}
+                    onClick={() => goToPage(i + 1)}
+                  >
+                    {i + 1}
+                  </button>
                 ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Pagination Controls */}
-          <div className="pagination">
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button
-                key={i + 1}
-                className={currentPage === i + 1 ? "active-page" : ""}
-                onClick={() => goToPage(i + 1)}
-              >
-                {i + 1}
-              </button>
-            ))}
-          </div>
+              </div>
+            </>
+          )}
         </>
+      ) : (
+        <DeviceManager />
       )}
     </div>
   );

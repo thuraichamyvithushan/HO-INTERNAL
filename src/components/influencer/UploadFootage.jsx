@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { API_URL } from '../../config';
 import { storage, firestore } from '../../firebase';
+import { doc, getDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudUploadAlt, faFileUpload, faCheckCircle, faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -19,15 +20,27 @@ const UploadFootage = (props) => {
     const [visibility, setVisibility] = useState('public');
     const [uploading, setUploading] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [deviceOptions, setDeviceOptions] = useState([]);
 
-    // Placeholder device options (usually these would come from a 'products' collection)
-    const deviceOptions = [
-        "Huntsman Thermal Alpha",
-        "Huntsman Night Vision V1",
-        "Huntsman Rangefinder X",
-        "Generic Thermal Scope",
-        "Generic Night Vision"
-    ];
+    React.useEffect(() => {
+        const fetchDevices = async () => {
+            try {
+                const docSnap = await getDoc(doc(firestore, 'settings', 'deviceOptions'));
+                if (docSnap.exists()) {
+                    setDeviceOptions(docSnap.data().devices || []);
+                } else {
+                    // Fallback defaults
+                    setDeviceOptions([
+                        "Huntsman Thermal Alpha",
+                        "Huntsman Night Vision V1"
+                    ]);
+                }
+            } catch (error) {
+                console.error("Error fetching device options:", error);
+            }
+        };
+        fetchDevices();
+    }, []);
 
     const handleFileChange = (e) => {
         if (e.target.files.length > 0) {

@@ -8,15 +8,16 @@ import AdminCard from "./AdminCard";
 
 
 const AdminPage = function () {
-    return(
-     <div>
-     
-        <AdminNavbar/>
-        <AdminDashboardnavimg/>
-        <AdminCard  />
-        <AdminDashboard/>
-       <Footer/>
-    </div>
-)}
+    return (
+        <div>
+
+            <AdminNavbar />
+            <AdminDashboardnavimg />
+            <AdminCard />
+            <AdminDashboard />
+            <Footer />
+        </div>
+    )
+}
 
 export default AdminPage;

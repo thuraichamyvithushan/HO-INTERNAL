@@ -4,7 +4,7 @@
   padding: 20px;
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -22,7 +22,7 @@
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 600px; 
+  min-width: 600px;
 }
 
 .admin-table th,
@@ -33,7 +33,7 @@
 }
 
 .admin-table thead {
-  background-color: #581010; 
+  background-color: #581010;
   color: white;
 }
 
@@ -58,7 +58,7 @@
   padding: 6px 12px;
   border: none;
   border-radius: 6px;
-  background-color: #ef4444; 
+  background-color: #ef4444;
   color: white;
   cursor: pointer;
   font-weight: 500;
@@ -107,7 +107,7 @@
   }
 
   .admin-table {
-    min-width: 500px; 
+    min-width: 500px;
   }
 
   .admin-table th,
@@ -173,8 +173,38 @@
   .pagination {
     gap: 5px;
   }
+
   .pagination button {
     padding: 4px 8px;
     font-size: 12px;
   }
+}
+
+/* ------------------- Admin Tabs ------------------- */
+.admin-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.admin-tab-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid #581010;
+  background-color: transparent;
+  color: #581010;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.admin-tab-btn:hover {
+  background-color: #ffe0e0;
+}
+
+.admin-tab-btn.active {
+  background-color: #581010;
+  color: #fff;
 }
